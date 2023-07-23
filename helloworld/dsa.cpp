@@ -54,6 +54,55 @@ void deletion(node* &head,int val){
 
     delete todelete;
 }
+void makecycle(node* &head,int pos){
+    node* temp = head;
+    node* startnode = NULL;
+    int counter = 1;
+    while(temp->next != NULL){
+        if(counter == pos){
+            startnode = temp;
+        }
+        temp = temp->next;
+        counter++;
+    }
+    temp->next = startnode;
+
+}
+
+bool detectcycle(node* &head){
+    node* slow = head;
+    node* fast = head;
+    while(fast != NULL && fast->next != NULL){
+        slow = slow->next;
+        fast = fast->next->next;
+        if(fast == slow){
+            return true;
+        }
+    }
+    return false;
+}
+void removecycle(node* &head){
+    node* slow = head;
+    node* fast = head;
+    do{
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    while(slow != fast);
+    if(fast == head){
+        while(fast->next != slow){
+            fast = fast->next;
+        }
+        fast->next = NULL;
+    }else if(fast == slow){
+    fast = head;
+    while(slow->next != fast->next){
+        slow = slow->next;
+        fast = fast->next;
+    }
+
+    slow->next = NULL;
+}}
 
 node* reversion(node* &head){
     node* prev = NULL;
@@ -81,10 +130,9 @@ node* reversionrecursive(node* &head){
 void display(node* head){
     node* temp = head;
     while(temp != NULL){
-        cout<<temp->data<<"->";
+        cout<<temp->data<<" ";
         temp = temp->next;
     }
-    cout<<"NULL"<<endl;
 }
 node* reversionK(node* &head,int k){
     node* prev = NULL;
@@ -105,17 +153,231 @@ node* reversionK(node* &head,int k){
 
     return prev;
 }
+int length(node* head){
+    node* temp = head;
+    int n = 0;
+    while(temp != NULL){
+        n++;
+        temp = temp->next;
+    }
+    return n;
+}
+node* lasttofront(node* &head,int k){
+    node* temp = head;
+    node* newhead;
+    node* newtail;
+    int count = 1;
+    int l = length(head);
+    while(temp->next != NULL){
+        if(count == (l-k)){
+            newtail = temp;
+        }
+        if(count == (l-k+1)){
+            newhead = temp;
+        }
+        count++;
+        temp = temp->next;
+    }
+    temp->next = head;
+    newtail->next = NULL;
+    return newhead;
+}
+void intersect(node* head1,node* head2,int pos){
+    node* temp1 = head1;
+    node* temp2 = head2;
+    int count = 1;
+    while(count != pos){
+        temp1 = temp1->next;
+        count++;
+    }
+    while(temp2->next != NULL){
+        temp2 = temp2->next;
+    }
+    temp2->next = temp1;
+}
+int intersection(node* &head1,node* &head2){
+    int l1 = length(head1);
+    int l2 = length(head2);
+    int d = 0;
+    node* ptr1;
+    node* ptr2;
+    if(l1>l2){
+        ptr1 = head1;
+        d = l1-l2;
+        ptr2 = head2;
+    }
+    else{
+        ptr1 = head2;
+        ptr2 = head1;
+        d = l2-l1;
+    }
+    while(d){
+        ptr1 = ptr1->next;
+        if(ptr1 == NULL){
+            return -1;
+        }
+        d--;
+    }
+    while(ptr1 != NULL && ptr2 != NULL){
+        if(ptr1 == ptr2){
+            return ptr1->data;
+        }
+        ptr1 = ptr1->next;
+        ptr2 = ptr2->next;
+    }
+    return -1;
+    
+}
+node* mergelists(node* head1,node* head2){
+    node* temp1 = head1;
+    node* temp2 = head2;
+    node* newhead = NULL;
+    node* newtemp = newhead;
+    while(temp1 != NULL && temp2 != NULL){
+        if(temp1->data < temp2->data){
+            insertattail(newhead,temp1->data);
+            temp1 = temp1->next;
+        }
+        else if(temp1->data == temp2->data){
+            insertattail(newhead,temp1->data);
+            temp1 = temp1->next;
+            temp2 = temp2->next;
+        }
+        else{
+            insertattail(newhead,temp2->data);
+            temp2 = temp2->next;
+        }
+    }
+    while(temp1 != NULL){
+        insertattail(newhead,temp1->data);
+            temp1 = temp1->next;
+        
+    }
+    while(temp2 != NULL){
+        insertattail(newhead,temp2->data);
+            temp2 = temp2->next;
+    }
+return newhead;
+}
+node* mergerecursive(node* &head1,node* &head2){
+    if(head1 == NULL){
+        return head2;
+    }
+    if(head2 == NULL){
+        return head1;
+    }
+    node* result;
+    if(head1->data < head2->data){
+        result = head1;
+        result->next = mergerecursive(head1->next,head2);
+    }
+    else if(head1->data == head2->data){
+        result = head1;
+        result->next = mergerecursive(head1->next,head2->next);
+    }
+    else{
+        result = head2;
+        result->next = mergerecursive(head1,head2->next);
+    }
+    return result;
+}
+void insertatheadcircular(node* &head,int val){
+    node* n = new node(val);
+    if(head == NULL){
+        n->next = n;
+        head = n;
+        return;
+    }
+    node* temp = head;
+    while(temp->next != head){
+        temp = temp->next;
+    }
+    temp->next = n;
+    n->next = head;
+    head = n;
+}
+void insertattailcircular(node* &head,int val){
+    if(head == NULL){
+        insertatheadcircular(head,val);
+        return;
+    }
+    node* n = new node(val);
+    node* temp = head;
+    while(temp->next != head){
+        temp = temp->next;
+    }
+    temp->next = n;
+    n->next = head;
+
+}
+void deleteatheadcircular(node* &head){
+
+    node* temp = head;
+    while(temp->next != head){
+        temp = temp->next;
+    }
+    node* todelete = head;
+    temp->next = head->next;
+    head = head->next;
+    delete todelete;
+}
+void deletioncircular(node* &head,int val){
+    node* temp = head;
+    if(head == NULL){
+        return;
+    }
+    if(head->data == val){
+        deleteatheadcircular(head);
+        return;
+    }
+    do{
+        temp = temp->next;
+    }
+    while(temp->next->data != val && temp != head);
+    node* todelete = temp->next;
+    temp->next = temp->next->next;
+    delete todelete;
+}
+void displaycircular(node* head){
+    node* temp = head;
+    do{
+        cout<<temp->data<<" ";
+        temp = temp->next;
+    }while(temp != head);
+}
+void displayoddfirst(node* &head){
+    node* t1 = head;
+    node* t2 = head->next;
+    node* starteven = t2;
+    while(t1->next != NULL && t2->next != NULL){
+        t1->next = t2->next;
+        t1 = t1->next;
+        if(t1->next != NULL){
+        t2->next = t1->next;
+        t2 = t2->next;
+    }}
+    if(t2->next == NULL){
+        t1->next = starteven;
+    }
+    if(t1->next == NULL){
+        t1->next = starteven;
+        t2->next = NULL;
+    }
+
+}
 
 
 int main(){
 node* head = NULL;
+node* head2 = NULL;
 insertattail(head,1);
 insertattail(head,2);
 insertattail(head,3);
 insertattail(head,4);
 insertattail(head,5);
-insertattail(head,6);
+displayoddfirst(head);
 display(head);
-node* newhead = reversionK(head,2);
-display(newhead);
+
+
+
 }

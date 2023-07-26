@@ -367,6 +367,7 @@ void displayoddfirst(node* &head){
 }
 
 
+
 int main(){
 node* head = NULL;
 node* head2 = NULL;

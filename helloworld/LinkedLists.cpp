@@ -365,6 +365,121 @@ void displayoddfirst(node* &head){
     }
 
 }
+//DOUBLY LINKED LIST
+class noded{
+  public:
+  int data;
+  noded* next;
+  noded* prev;
+  noded(int val){
+    data = val;
+    next = NULL;
+    prev = NULL;
+  }
+};
+void insertathead(noded* &head,int val){
+  noded* n = new noded(val);
+  n->next = head;
+  head = n;
+}
+void insertattail(noded* &head,int val){
+  if(head == NULL){
+    insertathead(head,val);
+    return;
+  }
+  noded* n = new noded(val);
+  noded* temp = head;
+  while(temp->next != NULL){
+    temp = temp->next;
+  }
+  temp->next = n;
+  n->prev = temp;
+}
+void display(noded* head){
+  noded* temp = head;
+  while(temp != NULL){
+    cout<<temp->data<<" ";
+    temp = temp->next;
+
+  }
+  cout<<endl;
+}
+void deleteathead(noded* &head){
+  noded* todelete = head;
+  head = head->next;
+  head->prev = NULL;
+  delete todelete;
+
+
+}
+
+void deletion(noded* &head,int val){
+  if(head->data == val){
+    deleteathead(head);
+    return;
+  }
+  noded* temp = head;
+  while(temp != NULL && temp->data!=val){
+    temp = temp->next;
+  }
+  noded* todelete = temp;
+
+  temp->prev->next = temp->next;
+  if(temp->next != NULL){
+  temp->next->prev = temp->prev;}
+delete todelete;
+  
+}
+//O(N2) METHOD TO FIND A SUM PAIR IN DLL
+void sumpairs(noded* &head,int key){
+  noded* temp = head;
+  noded* nextptr;
+  vector<vector<int>> ans;
+  while(temp != NULL){
+    noded* val1 = temp;
+    nextptr = temp->next;
+    temp = temp->next;
+    while(temp != NULL){
+      if(temp->data == (key - val1->data)){
+        ans.push_back({val1->data,temp->data});
+        break;
+      }
+      temp = temp->next;
+    }
+    temp = nextptr;
+
+  }
+  int num = ans.size();
+  for (int i = 0; i < num; i++)
+  {
+    cout<<ans[i][0]<<" "<<ans[i][1]<<endl;
+  }
+  
+}
+void sumpaireff(noded* &head,int key){
+  noded* first = head;
+  noded* second = head;
+  while(second->next != NULL){
+    second = second->next;
+  }
+  bool found = false;
+  while(first != second && second->next != first){
+    if((first->data + second->data) == key){
+      cout<<first->data<<" "<<second->data<<endl;
+    first = first->next;
+    second = second->prev;
+  }
+  else{
+    if((first->data + second->data) < key){
+
+      first = first->next;
+    }
+    else{
+      second = second->prev;
+    }
+  }
+}
+}
 
 
 

@@ -72,12 +72,32 @@ int prefixeval(string str){
   return st.top();
   
 }
+int findmiddle(stack<int> st){
+  int n = st.size();
+  int mid = (n/2 + 1);
+  int diff = (n - mid);
+  while(diff){
+    st.pop();
+    diff--;
+  }
+  return st.top();
+}
+int getmin(stack<int> st){
+  int min = st.top();
+  while(!st.empty()){
+    if(st.top() < min){
+      min = st.top();
+    }
+    st.pop();
+  }
+  return min;
+}
 int main(){
 stack<int> str;
-str.push(1);
 str.push(2);
-str.push(3);
+str.push(1212);
 str.push(4);
-string ss = "-5*36";
-cout<<prefixeval(ss);
-}
+str.push(7);
+cout<<getmin(str)<<endl;
+
+} 

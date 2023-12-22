@@ -92,12 +92,81 @@ int getmin(stack<int> st){
   }
   return min;
 }
+void display(stack<int> st){
+  cout<<st.top()<<" ";
+  st.pop();
+}
+# define n 20
+class queued{
+  int* arr;
+  int front;
+  int back;
+  public:
+  queued(){
+    arr = new int[n];
+    front = back = -1;
+  }
+  void push(int x){
+    if(back == n-1){
+      cout<<"queue overflow"<<endl;
+      return;
+    }
+    back++;
+    arr[back] = x;
+    if(front == -1){
+      front++;
+    }
+  }
+  void dequeue(){
+    if(front == -1 or front > back){
+      cout<<"queue empty"<<endl;
+      return;
+    }
+    front++;
+  }
+  int peek(){
+    if(front == -1 or front > back){
+      cout<<"queue empty"<<endl;
+      return -1;
+    }
+    return arr[front];
+  }
+  bool empty(){
+    if(front == -1 or front > back){
+      return true;
+    }
+    return false;
+  }
+
+};
+class stacked{
+  public:
+  queue<int> q1;
+  queue<int> q2;
+  void push(int x){
+    q1.push(x);
+  }
+  void pop(){
+    while(!q1.size() != 1){
+      q2.push(q1.front());
+      q1.pop();
+    }
+    q1.pop();
+    queue<int> temp = q2;
+    q2 = q1;
+    q1 = temp;
+  }
+};
+
 int main(){
 stack<int> str;
-str.push(2);
-str.push(1212);
-str.push(4);
-str.push(7);
-cout<<getmin(str)<<endl;
+queued qu;
+qu.push(1);
+qu.push(2);
+qu.push(3);
+qu.push(4);
+cout<<qu.peek()<<endl;
+qu.dequeue();
+cout<<qu.peek()<<endl;
 
 } 

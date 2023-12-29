@@ -1,52 +1,94 @@
-#include<iostream>
-#include<vector>
+#include <iostream>
 using namespace std;
+class node
+{
+public:
+    int data;
+    node *next;
 
-int main(){
-    int n;
-    cin >> n;
-    vector<vector<int>> arr;
-    vector<int> x;
-    arr.push_back({});
-    x.push_back(0);
-    for(int i = 1; i <= n; i++){
-        int y;
-        cin >> y;
-        x.push_back(y);
-        arr.push_back({});
-        for(int j = 0; j < y; j++){
-            int t;
-            cin >> t;
-            arr[i].push_back(t);
-        }
+    node(int val)
+    {
+        data = val;
+        next = NULL;
     }
-    vector<int> ans;
-    int l = 0;
-    do{
-        l = ans.size();
-        vector<int> p;
-        for(int i = 1; i < x.size(); i++){
-            if(x[i] == 0)
-            {
-                x[i] = -1;
-                ans.push_back(i);
-                p.push_back(i);
-            }
-        }
-        for(int i = 0; i < p.size(); i++){
-            for(int j = 1; j <= n; j++){
-                for(int t = 0; t < arr[j].size(); t++){
-                    if(p[i]==arr[j][t])
-                        x[j]--;
-                }
-            }
-        }
-    }while(l != ans.size());
-    if(ans.size() == n){
-        for(int i = 0; i < ans.size(); i++){
-            cout << ans[i] << " ";
-        }
+};
+
+void insert(node *&head, int val)
+{
+    node *n = new node(val);
+    node *temp = head;
+    if (head == NULL)
+    {
+        head = n;
+        return;
     }
-    else
-        cout<< "-1"<< endl;
+    while (temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    temp->next = n;
+}
+void print(node *head)
+{
+    node *temp = head;
+    while (temp != NULL)
+    {
+        cout << temp->data << "->";
+        temp = temp->next;
+    }
+    cout << "NULL";
+}
+void insertathead(node *&head, int val)
+{
+    node *n = new node(val);
+    n->next = head;
+    head = n;
+}
+void deleteathead(node *&head)
+{
+    node *todelete = head;
+    head = head->next;
+    delete todelete;
+}
+
+void deleter(node *&head, int val)
+{
+    if (head == NULL)
+    {
+        return;
+    }
+    if (head->data == val or head->next == NULL)
+    {
+        deleteathead(head);
+        return;
+    }
+    node *temp = head;
+    while (temp->next->data != val and temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    node *todelete = temp->next;
+    temp->next = temp->next->next;
+
+    delete todelete;
+}
+
+void detectcycle(node* head){
+    
+}
+int main()
+{
+    node *head = NULL;
+    insert(head, 3);
+    insert(head, 4);
+    insert(head, 565);
+    insert(head, 45);
+    insert(head, 23);
+
+    insertathead(head, 2);
+    print(head);
+    cout << endl;
+    deleter(head, 4);
+    deleter(head, 2);
+    print(head);
 }

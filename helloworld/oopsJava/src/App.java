@@ -4,6 +4,7 @@ import java.awt.event.*;
 import java.awt.event.ActionListener;
 import java.awt.*;
 
+/*
 public class App {
    public static class frame extends JFrame {
       public frame() {
@@ -65,5 +66,17 @@ public class App {
 
    public static void main(String[] args) {
       new frame();
+   }
+}
+*/
+public class App{
+   public static void main(String[] args){
+      List<int> lst = new ArrayList<>();
+      int[] arr = {3,5,4,6,7};
+      Iterator<int> itr = new lst.Iterator();
+      while(itr.hasNext()){
+         lst.add(itr.next());
+      }
+
    }
 }

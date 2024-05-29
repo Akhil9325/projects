@@ -2,7 +2,11 @@ import javax.swing.JFileChooser;
 import java.io.*;
 import javax.swing.*;
 
+
+
 public class frame{
+
+
     public static class framed extends JFrame{
         public framed(){
             setTitle("akhil");
@@ -18,5 +22,5 @@ public class frame{
     }
      public static void main(String[] args){
         new framed();
-     }
+}
 }

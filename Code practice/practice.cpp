@@ -1,81 +1,74 @@
-#include <bits/stdc++.h>
-#include <iostream>
-#include <utility>
-
+#include<bits/stdc++.h>
 using namespace std;
-#define pb push_back
-#define ll long long
-#define fo(a,b) for(auto i=a;i<b;i++)
-#define nfo(a,b) for(auto i=a;i>=b;i--)
-#define all(x) x.begin(), x.end()
-#define sz(q) (ll)(q.size())
-#define jfo(a,b) for(auto j=a;j<b;j++)
-#define njfo(a,b) for(auto j=a;j>=b;j--)
-#define kfo(a,b) for(auto k=a;k<b;k++)
-#define nkfo(a,b) for(auto k=a;k>=b;k--)
-#define vi vector<ll>
-#define vii vector<vector<ll>>
-#define vpii vector<pair<ll,ll>>
-#define vvpii vector<vector<pair<ll,ll>>>
-#define viii vector<vector<vector<ll>>>
-#define umii unordered_map<ll,ll>
-#define mii map<ll,ll> 
-#define umipii unordered_map<ll,pair<ll,ll>>
-#define umivi unordered_map<ll,vector<ll>>
-#define NO cout<<"NO"<<endl
-#define YES cout<<"YES"<<endl
-#define pii pair<ll,ll> 
-const ll mod=1000000007;
 
-
-void solve() {
-    ll n,m;
-    cin>>n>>m;
-    vii arr(n,vi(m));
-    fo(0,n){
-        jfo(0,m){
-            cin>>arr[i][j];
-        }
+ struct TreeNode {
+      int val;
+      TreeNode *left;
+      TreeNode *right;
+      TreeNode() : val(0), left(nullptr), right(nullptr) {}
+      TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+      TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+  };
+class Solution {
+public:
+TreeNode* ancs(TreeNode* root,int st,int dest){
+    if(root == NULL){
+        return NULL;
     }
-    
-    fo(0,n){
-        jfo(0,m){
-
-            ll l=j==0?INT_MIN:arr[i][j-1];
-            ll u=i==0?INT_MIN:arr[i-1][j];
-            ll r=j==m-1?INT_MIN:arr[i][j+1];
-            ll d=i==n-1?INT_MIN:arr[i+1][j];
-            if(arr[i][j]>l && arr[i][j]>r && arr[i][j]>u && arr[i][j]>d){
-                ll t1=max(l,r);
-                ll t2=max(u,d);
-                ll val=max(t1,t2);
-                arr[i][j]=val;
-                //so here what we actually did was to first check whether this cell is the peak one meaning that is it strictly greater than all its neighbouring cells and then we had to decrease the value of that cell until it became equal to the next maximum element so instead of doing that process in a while loop directly identify the next highest element and set the cell to that and move forward.
-
-                // so today i would try to atleast complete 75% of the recursion playlist and then by tommorrow i complete this playlist and move on to the dynamic programming strivers playlist after that i also have to study graph becaue i cannot do its questions
-                //also i have to keep on doing random array,string questions as they would make us get to understand new methods likebinary search maximization and sliding window etc.
-                
-            }
-            
-        }
+    if(root->val == st or root->val == dest){
+        return root;
     }
-    fo(0,n){
-        jfo(0,m){
-            cout<<arr[i][j]<<" ";
-        }
-        cout<<endl;
+    TreeNode* left = ancs(root->left,st,dest);
+    TreeNode* right = ancs(root->right,st,dest);
+    if(left == NULL and right == NULL){
+        return NULL;
     }
-
+    if(left != NULL and right != NULL){
+        return root;
+    }
+    if(left != NULL){
+        return left;
+    }
+    else{
+        return right;
+    }
 }
- 
-int main(){ 
-    ios_base:: sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    ll t=1;
-    cin>>t;
-    while(t--) {
-        solve();
+void dist(TreeNode* root,int st,string d,string& s){
+    if(root == NULL){
+        return;
     }
-    return 0; 
+    if(st == root->val){
+        s.append(d);
+        return;
+    }
+    d.push_back('U');
+    dist(root->left,st,d,s);
+    dist(root->right,st,d,s);
+}
+
+void dista(TreeNode* root,int st,string da,string& s){
+    if(root == NULL){
+        return ;
+    }
+    if(st == root->val){
+        s.append(da);
+        return;
+    }
+    da.push_back('L');
+    dista(root->left,st,da,s);
+    da.pop_back();
+    da.push_back('R');
+    dista(root->right,st,da,s);
+}
+    string getDirections(TreeNode* root, int st, int dest) {
+        root = ancs(root,st,dest);
+        string s;
+        dist(root,st,"",s);
+        dista(root,dest,"",s);
+        return s;
+    }
+};
+
+int main(){
+    
 }
